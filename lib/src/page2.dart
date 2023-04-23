@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'package:weather_app/src/model/weather_model.dart';
-import 'package:weather_app/src/model/weather_model.dart';
-import 'package:http/http.dart' as https;
-import 'package:geolocator/geolocator.dart';
+// import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
+import 'package:weather_app/src/repo.dart';
 
 class page2 extends StatefulWidget {
   const page2({super.key});
@@ -13,63 +11,79 @@ class page2 extends StatefulWidget {
 }
 
 class _page2State extends State<page2> {
+  Weather_modal? weather_modal;
+  // late Weather_modal weather;
+  // Weather_modal? weather_modal;
 
+  bool loading = true;
   var locationLoading = false;
   @override
-  void initState() {
-    getLocationInfo();
-    super.initState();
-  }
 
-  fetchWeatherInfo({double long = 86.42, double lat = 20.49}) async {
-    var response = await https.post(
-      Uri.parse(
-          "https://api.openweathermap.org/data/2.5/weather?lat=${lat.toString()}&lon=${long.toString()}&appid=30bc1dae9d219aaa107f75ba1682a80c"),
-    );
-    var decodedJson = await jsonDecode(response.body);
-    late Weather_modal weather;
-    weather = Weather_modal(
-        main: decodedJson["weather"][0]["main"],
-        description: decodedJson["weather"][0]["description"],
-        country: decodedJson["sys"]["country"],
-        icon: decodedJson["weather"][0]["icon"],
-        name: decodedJson["name"],
-        id: decodedJson["weather"][0]["id"],
-        tempMax: decodedJson["main"]["temp_max"],
-        tempMin: decodedJson["main"]["temp_min"],
-        temp: decodedJson["main"]["temp"]);
-  }
+  // weather = Weather_modal(
+  //     main: decodedJson["weather"][0]["main"],
+  //     description: decodedJson["weather"][0]["description"],
+  //     country: decodedJson["sys"]["country"],
+  //     icon: decodedJson["weather"][0]["icon"],
+  //     name: decodedJson["name"],
+  //     id: decodedJson["weather"][0]["id"],
+  //     tempMax: decodedJson["main"]["temp_max"],
+  //     tempMin: decodedJson["main"]["temp_min"],
+  //     temp: decodedJson["main"]["temp"]);
 
-  void getLocationInfo() async {
-    locationLoading = true;
+  // void getLocationInfo() async {
+  //   locationLoading = true;
 
-    await Geolocator.checkPermission();
-    await Geolocator.requestPermission();
+  //   await Geolocator.checkPermission();
+  //   await Geolocator.requestPermission();
 
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.low);
+  //   Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.low);
 
-    fetchWeatherInfo(long: position.longitude, lat: position.latitude);
-  }
+  //   fetchWeatherInfo(long: position.longitude, lat: position.latitude);
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-     body:  Container(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        margin: const EdgeInsets.only(top: 20),
-                        width: double.infinity,
-                        decoration: const BoxDecoration(
-                            color: Colors.green,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(12))),
-                        child: Center(
-                            child: Text(
-                         Weather_modal.temp!,
-                          style: const TextStyle(color: Colors.white),
-                        )),
-                      ),
-               
+    return Scaffold(body: Container(
+        Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      icon,
+                      width: 120,
+                      height: 120,
+                      fit: BoxFit.cover,
+                    ),
+                    const SizedBox(
+                      width: 50,
+                    ),
+                    Text(
+                      "${(weather_modal?.temp! - 275)}°",
+                      style: TextStyle(
+                          fontSize: 130,
+                          fontStyle: FontStyle.normal,
+                          color: weatherAccentColor),
+                    ),
+                    Text(
+                      "${(weather_modal.temp_max - 275)} °C",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          
+                    ),
+                    const SizedBox(width: 20),
+                    
+                    const SizedBox(width: 10),
+                    Text(
+                      '${(weather_modal.temp_min - 275).truncate()} °C',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Color.fromARGB(255, 39, 55, 96)),
+                    ),
+                  ],
+                ),
+    ),
     );
   }
 }
