@@ -11,11 +11,14 @@ class repo {
     );
     var decodedJson = await jsonDecode(response.body);
     print(response);
+    
     try {
       if ((response).statusCode == 200) {
         return Weather_modal.fromJson(jsonDecode(response.body));
       }
-    } catch (e) {
+      
+    }
+     catch (e) {
       throw Exception();
     }
   }

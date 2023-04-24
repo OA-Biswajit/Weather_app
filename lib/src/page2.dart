@@ -2,6 +2,7 @@ import 'package:weather_app/src/model/weather_model.dart';
 // import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
 import 'package:weather_app/src/repo.dart';
+import 'package:weather_app/src/repo.dart';
 
 class page2 extends StatefulWidget {
   const page2({super.key});
@@ -11,11 +12,22 @@ class page2 extends StatefulWidget {
 }
 
 class _page2State extends State<page2> {
+  List<Weather_modal> L1 = [];
+  List<Color> color = [
+    Colors.red,
+    Colors.blue,
+    Colors.pink,
+    Colors.teal,
+    Colors.purple,
+  ];
+
+  @override
   Weather_modal? weather_modal;
   // late Weather_modal weather;
   // Weather_modal? weather_modal;
+  bool isLoading = true;
+  bool loading = false;
 
-  bool loading = true;
   var locationLoading = false;
   @override
 
@@ -44,46 +56,213 @@ class _page2State extends State<page2> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Container(
-        Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      icon,
-                      width: 120,
-                      height: 120,
-                      fit: BoxFit.cover,
-                    ),
-                    const SizedBox(
-                      width: 50,
-                    ),
-                    Text(
-                      "${(weather_modal?.temp! - 275)}°",
-                      style: TextStyle(
-                          fontSize: 130,
-                          fontStyle: FontStyle.normal,
-                          color: weatherAccentColor),
-                    ),
-                    Text(
-                      "${(weather_modal.temp_max - 275)} °C",
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          
-                    ),
-                    const SizedBox(width: 20),
-                    
-                    const SizedBox(width: 10),
-                    Text(
-                      '${(weather_modal.temp_min - 275).truncate()} °C',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Color.fromARGB(255, 39, 55, 96)),
-                    ),
-                  ],
-                ),
-    ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.purple,
+        title: const Text('Weather report'),
+        centerTitle: true,
+      ),
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ListView.builder(
+              itemCount: L1.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.only(
+                    bottom: 5,
+                    top: 10,
+                    left: 10,
+                    right: 10,
+                  ),
+                  decoration: BoxDecoration(
+                      color: color[index],
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(12))),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'country : ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            L1[index].country.toString(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Clouds : ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            L1[index].clouds.toString(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'weather : ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            L1[index].weather.toString(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'main : ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            L1[index].main.toString(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'visibility : ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            L1[index].visibility.toString(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'temp : ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            L1[index].temp.toString(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'tempMin : ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            L1[index].tempMin.toString(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'tempMax : ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            L1[index].tempMax.toString(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'wind : ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Flexible(
+                            child: Text(
+                              L1[index].wind.toString(),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
     );
   }
 }
