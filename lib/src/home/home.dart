@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
 
               ElevatedButton(
                 onPressed: () async {
-                  repo().fetchWeatherInfo(cityLocation.text);
+                  repo().fetchWeatherInfo(city: cityLocation.text);
                   
                   setState(() {});
                 
